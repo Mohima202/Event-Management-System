@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organizer Panel – Selected Submissions</title>
+<style>
+body{font-family:Arial,sans-serif; background:#ffe4f0; margin:0;}
+header{background:#ff5fa2;color:white;padding:18px;display:flex;justify-content:space-between;align-items:center;}
+header h1{margin:0;font-size:24px;font-weight:bold;}
+.container{width:90%; max-width:1000px; margin:20px auto;}
+.event-item{background:white;padding:15px;border-radius:12px;margin-bottom:15px;display:flex;gap:15px;align-items:center;box-shadow:0 4px 10px rgba(255,105,180,.2);}
+.event-item img{width:120px;height:90px;object-fit:cover;border-radius:8px;border:1px solid #ccc;}
+.event-details{display:flex;flex-direction:column;gap:4px;}
+.event-details strong{font-size:16px;}
+.no-event{text-align:center;font-size:18px;color:#555;margin-top:50px;}
+.serial{font-weight:bold;color:#ff5fa2;}
+.header-button{background:white;color:#ff5fa2;border:none;padding:6px 12px;border-radius:6px;font-weight:bold;cursor:pointer;}
+.header-button:hover{background:#ffe4f0;}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Organizer Panel – Selected Submissions</h1>
+    <form action="{% url 'organizer' %}" method="get" style="margin:0;">
+        <button class="header-button">Back</button>
+    </form>
+</header>
+
+<div class="container">
+
+{% if submissions %}
+  {% for sub in submissions %}
+    <div class="event-item">
+
+      {% comment %} Show event image based on category (case-insensitive) {% endcomment %}
+      {% with sub.category_clean as cat %}
+    {% if cat == "birthday" %}
+        <img src="{% static 'EventApp/eventpics/birthday 1.png' %}">
+    {% elif cat == "wedding" %}
+        <img src="{% static 'EventApp/eventpics/wedding.png' %}">
+    {% elif cat == "anniversary" %}
+        <img src="{% static 'EventApp/eventpics/anniversary.png' %}">
+    {% elif cat == "corporate" %}
+        <img src="{% static 'EventApp/eventpics/corporate.png' %}">
+    {% elif cat == "baby shower" %}
+        <img src="{% static 'EventApp/eventpics/babyshower.png' %}">
+    {% elif cat == "farewell" %}
+        <img src="{% static 'EventApp/eventpics/farewell.png' %}">
+    {% elif cat == "graduation" %}
+        <img src="{% static 'EventApp/eventpics/graduation.png' %}">
+    {% elif cat == "housewarming" %}
+        <img src="{% static 'EventApp/eventpics/housewarming.png' %}">
+    {% elif cat == "festival" %}
+        <img src="{% static 'EventApp/eventpics/festival.png' %}">
+    {% elif cat == "concert" %}
+        <img src="{% static 'EventApp/eventpics/concert.png' %}">
+    {% elif cat == "fashion" %}
+        <img src="{% static 'EventApp/eventpics/fashion.png' %}">
+    {% elif cat == "workshop" %}
+        <img src="{% static 'EventApp/eventpics/workshop.png' %}">
+    {% elif cat == "sports" %}
+        <img src="{% static 'EventApp/eventpics/sports.png' %}">
+    {% elif cat == "charity" %}
+        <img src="{% static 'EventApp/eventpics/charity.png' %}">
+    {% else %}
+        <img src="{% static 'EventApp/eventpics/default.png' %}">
+    {% endif %}
+{% endwith %}
+
+      <div class="event-details">
+        <span class="serial">#{{ forloop.counter }}</span>
+        <strong>Event: {{ sub.idea_title }}</strong>
+        <span>Participant: {{ sub.participant_name }}</span>
+        <span>Email: {{ sub.participant_email }}</span>
+        <span>Preferred Date: {{ sub.preferred_date }}</span>
+        <span>Selected At: {{ sub.updated_at|date:"d M Y, h:i A" }}</span>
+      </div>
+
+    </div>
+  {% endfor %}
+{% else %}
+  <p class="no-event">No submission has been selected yet!</p>
+{% endif %}
+
+</div>
+</body>
+</html>

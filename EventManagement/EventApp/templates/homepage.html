@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Harmoni – Event Management System{% endblock %}</title>
+  <meta name="theme-color" content="#CDA3FF" />
+
+  {% load static %}
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; transition:0.3s; }
+    html { scroll-behavior: smooth; }
+
+    body { 
+      background:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      background-attachment: fixed;
+      color:#555; 
+      line-height:1.6; 
+      position: relative;
+    }
+    body::before { content: ""; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.25); z-index: -1; }
+
+    a { text-decoration:none; color:inherit; }
+    h1,h2,h3,h4,h5,h6 { font-weight:bold; }
+
+    :root {
+      --primary-gradient: linear-gradient(270deg,#D9B3FF,#CDA3FF,#FFCCE1,#FFD1B3);
+      --primary-color: #CDA3FF;
+      --accent-color: #B38FFF;
+      --text-light: #fff;
+      --text-dark: #555;
+      --text-darkmode: #ccc;
+      --card-bg: #fff;
+      --card-shadow: rgba(0,0,0,0.08);
+    }
+
+    header { background: var(--primary-gradient); background-size: 600% 600%; animation: gradientBG 12s ease infinite; backdrop-filter: blur(10px); padding: 15px 8%; position: sticky; top:0; z-index:100; color: var(--text-light); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+    nav { display:flex; justify-content:space-between; align-items:center; }
+    .logo { font-size:24px; font-weight:bold; color:var(--text-light); }
+    nav ul { list-style:none; display:flex; gap:25px; }
+    nav ul li a { padding:6px 12px; border-radius:25px; font-weight:600; color:var(--text-light); }
+    nav ul li a:hover { background: rgba(255,255,255,0.2); }
+
+    .btn { padding:10px 20px; border-radius:30px; font-weight:600; cursor:pointer; border:none; background: var(--primary-gradient); background-size:300% 300%; color:var(--text-light); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+    .btn-outline { background:transparent; border:2px solid var(--primary-color); color:var(--primary-color); }
+    .btn:hover { transform:translateY(-3px); }
+
+    @keyframes gradientBG { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+
+    .hero { min-height:90vh; display:grid; grid-template-columns:1fr 1fr; align-items:center; padding:0 8%; gap:40px; color:var(--text-light); }
+    .hero h1 { font-size:48px; margin-bottom:20px; text-shadow:0 2px 10px rgba(0,0,0,0.4); }
+    .hero p { margin-bottom:30px; font-size:18px; color:#fff; text-shadow:0 1px 5px rgba(0,0,0,0.4); }
+
+    .dashboard-cards { display:grid; grid-template-columns:repeat(2,1fr); gap:15px; margin-bottom:20px; }
+    .card-overview { background: rgba(255,255,255,0.2); padding:20px; border-radius:20px; text-align:center; }
+    .card-overview h3 { font-size:16px; margin-bottom:5px; color:#fff; }
+    .card-overview p { font-size:20px; font-weight:bold; color:#fff; }
+
+    .recent-events { background: rgba(255,255,255,0.2); border-radius:20px; padding:15px; max-height:180px; overflow-y:auto; }
+    .recent-events h4 { margin-bottom:10px; font-size:18px; color:#fff; }
+    .recent-events ul { list-style:none; }
+    .recent-events ul li { margin-bottom:8px; font-size:14px; color:#fff; }
+
+    .hero-dashboard { border-radius:30px; height:380px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:20px; background: var(--primary-gradient); background-size:600% 600%; animation:gradientBG 12s ease infinite; box-shadow:0 8px 20px rgba(0,0,0,0.15); color:#fff; overflow:hidden; }
+
+    .section { padding:80px 8%; }
+    .section-title { text-align:center; margin-bottom:50px; }
+    .section-title h2 { font-size:36px; margin-bottom:10px; color:var(--primary-color); }
+    .section-title p { color:#fff; font-size:16px; }
+
+    #categories-section { background: url("{% static 'categories-bg.jpg' %}") center/cover no-repeat; position: relative; border-radius: 20px; padding: 100px 8%; overflow: hidden; }
+    #categories-section::before { content: ""; display: none; }
+
+    .categories { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:25px; position:relative; z-index:1; }
+    .category-card { background: var(--card-bg); border-radius:20px; text-align:center; transition:0.3s; cursor:pointer; box-shadow:0 4px 12px var(--card-shadow); overflow:hidden; }
+    .category-card img { width:100%; height:150px; object-fit:cover; border-top-left-radius:20px; border-top-right-radius:20px; }
+    .category-card h3 { color:var(--primary-color); margin:15px 0 8px; font-size:18px; }
+    .category-card p { color:#555; font-size:14px; margin-bottom:15px; }
+
+    .features { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:25px; }
+    .card { background: var(--card-bg); padding:30px; border-radius:20px; transition:0.3s; box-shadow:0 4px 12px var(--card-shadow); }
+    .card:hover { transform:translateY(-8px); }
+    .card h3 { margin-bottom:10px; color:var(--primary-color); font-size:18px; }
+    .card p { color:#555; font-size:14px; }
+
+    .cta { text-align:center; background:var(--primary-gradient); padding:70px 8%; border-radius:40px; margin:80px 8%; color:#fff; box-shadow:0 8px 20px rgba(0,0,0,0.15); }
+    .cta h2 { font-size:36px; margin-bottom:15px; }
+    .cta p { font-size:16px; margin-bottom:25px; }
+
+    footer { padding:40px 8%; background:#111; text-align:center; color:var(--text-darkmode); font-size:14px; display:flex; flex-direction:column; align-items:center; gap:15px; }
+
+    footer .social-links { display:flex; gap:15px; }
+    footer .social-links a { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; font-size:20px; color:#ccc; border-radius:50%; background:rgba(255,255,255,0.05); transition: all 0.3s; }
+    footer .social-links a:hover { background: var(--primary-gradient); color:#fff; transform: scale(1.2); }
+
+    footer .contact-info p { font-size:14px; margin:3px 0; color:#ccc; }
+
+    body.dark { background:#121212; color:var(--text-darkmode); }
+    body.dark .category-card, body.dark .card { background:#1e1e1e; color:var(--text-darkmode); }
+    body.dark .section-title p { color:#ccc; }
+    body.dark footer { background:#111; color:#ccc; }
+
+    @media(max-width:900px){
+      .hero { grid-template-columns:1fr; text-align:center; }
+      .hero-dashboard { height:auto; margin-top:30px; }
+      .recent-events { max-height:150px; }
+      footer { gap:5px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">Harmoni</div>
+    <ul>
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#categories-section">Categories</a></li>
+      <li><a href="#features_card">Our Services</a></li> 
+      <li><a href="#footer">Contact</a></li>
+    </ul>
+    <div class="auth-buttons">
+      <a href="{% url 'register' %}" class="btn">Register</a>
+      <a href="{% url 'login' %}" class="btn btn-outline">Login</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero" id="hero">
+  <div>
+    <h1>Smart Event Management System</h1>
+    <p>Your one-stop solution to plan weddings, birthdays, festivals, corporate & cultural events easily.</p>
+    <a href="{% url 'login' %}" class="btn">Create Event</a>
+  </div>
+  <div class="hero-dashboard">
+    <div class="dashboard-cards">
+      <div class="card-overview">
+        <h3>Total Events</h3>
+        <p>{{ total_events }}</p>
+      </div>
+      <div class="card-overview">
+        <h3>Upcoming</h3>
+        <p>{{ upcoming_events }}</p>
+      </div>
+      <div class="card-overview">
+        <h3>Completed</h3>
+        <p>{{ completed_events }}</p>
+      </div>
+      <div class="card-overview">
+        <h3>Pending</h3>
+        <p>{{ pending_requests }}</p>
+      </div>
+    </div>
+    <div class="recent-events">
+      <h4>Recent Events</h4>
+      <ul>
+        {% for event in recent_events %}
+          <li>{{ event.name }} - {{ event.date|date:"d M" }}</li>
+        {% empty %}
+          <li>No recent events</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="categories-section">
+  <div class="section-title">
+    <h2>Event Categories</h2>
+    <p>Choose your event type & we will manage it perfectly</p>
+  </div>
+  <div class="categories" id="category-container">
+    <div class="category-card">
+      <img src="{% static 'EventApp/eventpics/wedding1.jpg' %}" alt="Wedding Ceremony">
+      <h3>Wedding Ceremony</h3>
+      <p>Complete wedding planning & decoration</p>
+    </div>
+    <div class="category-card">
+      <img src="{% static 'EventApp/eventpics/birthday1.jpg' %}" alt="Birthday Party">
+      <h3>Birthday Party</h3>
+      <p>Kids & adult birthday celebration</p>
+    </div>
+    <div class="category-card">
+      <img src="{% static 'EventApp/eventpics/mehendi1.jpg' %}" alt="Holud & Mehendi Night">
+      <h3>Holud & Mehendi Night</h3>
+      <p>Traditional colorful pre-wedding events</p>
+    </div>
+    <div class="category-card">
+      <img src="{% static 'EventApp/eventpics/pohela1.jpg' %}" alt="Pohela Boishakh">
+      <h3>Pohela Boishakh</h3>
+      <p>Bengali New Year cultural festival</p>
+    </div>
+    <div class="category-card">
+      <img src="{% static 'EventApp/eventpics/eid1.jpg' %}" alt="Eid Celebration">
+      <h3>Eid Celebration</h3>
+      <p>Eid day & corporate iftar events</p>
+    </div>
+    <div class="category-card">
+      <img src="{% static 'EventApp/eventpics/convocation1.jpg' %}" alt="Convocation">
+      <h3>Convocation</h3>
+      <p>University & institutional ceremonies</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features_card">
+  <div class="section-title">
+    <h2>Why Choose Harmoni?</h2>
+    <p>Professional, flexible & fully customizable</p>
+  </div>
+
+  <div class="features">
+    <div class="card">
+      <h3>Custom Event Planning</h3>
+      <p>User preference based planning for each category.</p>
+    </div>
+    <div class="card">
+      <h3>Budget Friendly</h3>
+      <p>Events designed according to your budget.</p>
+    </div>
+    <div class="card">
+      <h3>Expert Team</h3>
+      <p>Experienced planners & decorators.</p>
+    </div>
+    <div class="card">
+      <h3>Online Booking</h3>
+      <p>Create & manage events from dashboard.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>Tell Us Your Dream Event</h2>
+  <p>Select category & customize everything your way</p>
+  <a href="{% url 'login' %}" class="btn">Start Now</a>
+</section>
+
+<footer id="footer">
+  <div class="social-links">
+    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+    <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+  </div>
+  <div class="contact-info">
+    <p>Call us: +8801234567890</p>
+    <p>© 2025 Harmoni Event Management System. All Rights Reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

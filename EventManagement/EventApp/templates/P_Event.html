@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Our Events</title>
+<!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+
+<style>
+/* ===== GLOBAL THEME ===== */
+body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #f7f2ff, #fdeaff);
+    margin: 0;
+    padding: 0;
+    padding-bottom: 0%;
+    color: #333;
+}
+
+/* ===== HEADER ===== */
+header {
+    background: linear-gradient(135deg, #b517ff, #ff3db0);
+    border-bottom: 3px solid #ffffffff;
+}
+
+.nav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+nav ul li a:hover { color: #ffd1e0; }
+
+/* ===== PAGE TITLE ===== */
+.page-title {
+    text-align: center;
+    padding: 35px 0 15px;
+    font-size: 36px;
+    font-weight: 700;
+    color: #6a0dad;
+}
+
+/* ===== MOTIVATIONAL LINE ===== */
+.motivation-box {
+    text-align: center;
+    font-size: 18px;
+    color: #5a2c8f;
+    margin-top: 10px;
+}
+
+.participate-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 22px;
+    background: linear-gradient(135deg, #b517ff, #ff3db0);
+    color: white;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.participate-btn:hover {
+    transform: scale(1.06);
+    box-shadow: 0 5px 18px rgba(255, 0, 128, 0.4);
+}
+
+/* ===== EVENT GRID ===== */
+.event-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 40px;
+    max-width: 1300px;
+    margin: auto;
+}
+
+/* ===== EVENT CARD ===== */
+.event-card {
+    background: white;
+    border-radius: 16px;
+    padding-bottom: 20px;
+    box-shadow: 0 5px 20px rgba(106, 13, 173, 0.14);
+    transition: 0.35s ease;
+    overflow: hidden;
+}
+
+.event-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 35px rgba(255, 0, 128, 0.25);
+}
+
+/* ===== CARD IMAGE ===== */
+.event-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* ===== CARD CONTENT ===== */
+.event-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #6a0dad;
+    margin: 15px;
+}
+
+.event-date {
+    font-size: 14px;
+    margin-left: 15px;
+    color: #777;
+}
+
+.event-desc {
+    font-size: 14px;
+    margin: 10px 15px;
+    color: #555;
+}
+
+/* ===== VIEW MORE BUTTON ===== */
+.view-btn {
+    display: block;
+    width: 140px;
+    margin: 10px auto;
+    padding: 8px 10px;
+    text-align: center;
+    background: #e0cafd;
+    color: #4a006f;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.view-btn:hover {
+    background: #d29bff;
+}
+
+footer { margin-top: 40px; margin-bottom: 0;
+    padding:40px 8%; background:#111; text-align:center; color:var(--text-darkmode); 
+    font-size:14px; display:flex; flex-direction:column; align-items:center; gap:15px; 
+}
+
+    footer .social-links { display:flex; gap:15px; }
+    footer .social-links a { display:inline-flex; align-items:center; justify-content:center; 
+        width:40px; height:40px; font-size:20px; color:#ccc; border-radius:50%; 
+        background:rgba(255,255,255,0.05); transition: all 0.3s; }
+    footer .social-links a:hover { 
+        background: var(--primary-gradient); color:#fff; transform: scale(1.2); }
+
+    footer .contact-info p { 
+        font-size:14px; margin:3px 0; color:#ccc; 
+    }
+</style>
+</head>
+
+<body>
+<header>
+  <div class="nav-inner">
+    <div class="logo">HARMONI</div>
+    <nav>
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'p_event' %}">Events</a></li>
+        <li><a href="{% url 'login' %}">Organizer</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<h1 class="page-title">Event Highlights</h1>
+
+<!-- ===== EVENTS GRID ===== -->
+<div class="event-grid">
+
+    <!-- 1 Wedding -->
+    <div class="event-card">
+        <img src="https://media.bookeventz.com/html/bookeventz.com/images/albums/IMG-20250320-WA0062.jpg" alt="">
+        <div class="event-title">Wedding Ceremony</div>
+        <div class="event-date">Event Type: Marriage</div>
+        <div class="event-desc">A beautiful wedding setup with elegant décor and a magical atmosphere.</div>
+        <a href="https://www.bookeventz.com/real-events/rakesh-weds-namarta" class="view-btn">View More</a>
+    </div>
+
+    <!-- 2 Birthday -->
+    <div class="event-card">
+        <img src="https://media.bookeventz.com/html/bookeventz.com/images/albums/arivs-first-birthday-party-149198017403122890010.jpg" alt="">
+        <div class="event-title">Birthday Party</div>
+        <div class="event-date">Event Type: Birthday</div>
+        <div class="event-desc">A fun and colorful celebration with themed decorations and games.</div>
+        <a href="https://www.bookeventz.com/real-events/arivs-first-birthday-party" class="view-btn">View More</a>
+    </div>
+
+    <!-- 4 Anniversary -->
+    <div class="event-card">
+        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622" alt="">
+        <div class="event-title">Anniversary Celebration</div>
+        <div class="event-date">Event Type: Anniversary</div>
+        <div class="event-desc">Romantic décor, soft lighting, and a memorable celebration setup.</div>
+        <a href="https://www.bookeventz.com/real-events/an-ode-to-cocktail-parties" class="view-btn">View More</a>
+    </div>
+
+    <!-- 5 Baby Shower -->
+    <div class="event-card">
+        <img src="https://media.bookeventz.com/html/bookeventz.com/images/albums/niddys-baby-shower-14984626850019631008.jpg" alt="">
+        <div class="event-title">Baby Shower</div>
+        <div class="event-date">Event Type: Baby Shower</div>
+        <div class="event-desc">Charming baby-themed decorations and joyful moments.</div>
+        <a href="https://www.bookeventz.com/real-events/niddys-baby-shower" class="view-btn">View More</a>
+    </div>
+
+    <!-- 6 Engagement -->
+    <div class="event-card">
+        <img src="https://media.bookeventz.com/html/bookeventz.com/images/albums/DSC08437.jpg" alt="">
+        <div class="event-title">Engagement Ceremony</div>
+        <div class="event-date">Event Type: Engagement</div>
+        <div class="event-desc">A stylish engagement event capturing love and celebration.</div>
+        <a href="https://www.bookeventz.com/real-events/shalin-shivani" class="view-btn">View More</a>
+    </div>
+
+    <!-- 7 Graduation -->
+    <div class="event-card">
+        <img src="https://th.bing.com/th/id/OIP.I7MIGiTp-HrYm8F9VWafDQHaET?w=301&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.5&pid=1.7&rm=3&ucfimg=1" alt="">
+        <div class="event-title">Graduation Party</div>
+        <div class="event-date">Event Type: Graduation</div>
+        <div class="event-desc">Celebrating academic achievements with friends and family.</div>
+        <a href="#" class="view-btn">View More</a>
+    </div>
+
+    <!-- 3 Corporate -->
+    <div class="event-card">
+        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0" alt="">
+        <div class="event-title">Corporate Event</div>
+        <div class="event-date">Event Type: Office Party</div>
+        <div class="event-desc">Professional corporate seminars, networking events, and team gatherings.</div>
+        <a href="https://www.bookeventz.com/real-events/treadmill-chemarc" class="view-btn">View More</a>
+    </div>
+
+    <!-- 8 Festival -->
+    <div class="event-card">
+        <img src="https://media.bookeventz.com/html/bookeventz.com/images/albums/carwales-annual-award-function-15401938430041312000.jpg" alt="">
+        <div class="event-title">Festival Event</div>
+        <div class="event-date">Event Type: Eid / Boishakh</div>
+        <div class="event-desc">Vibrant festival celebration filled with music and culture.</div>
+        <a href="https://www.bookeventz.com/real-events/carwales-annual-award-function" class="view-btn">View More</a>
+    </div>
+
+    <!-- 9 Concert -->
+    <div class="event-card">
+        <img src="https://images.unsplash.com/photo-1518972559570-7cc1309f3229" alt="">
+        <div class="event-title">Concert / Music Event</div>
+        <div class="event-date">Event Type: Concert</div>
+        <div class="event-desc">Energetic live music event with mesmerizing lighting.</div>
+        <a href="#" class="view-btn">View More</a>
+    </div>
+
+</div>
+
+<div class="motivation-box">
+    Got an idea? Share it with us and be part of the next big event!  
+    <br>
+    <a class="participate-btn" href="{% url 'participate' %}">Participate Now</a>
+</div>
+
+<footer id="footer">
+  <div class="social-links">
+    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+    <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+  </div>
+  <div class="contact-info">
+    <p>Call us: +8801234567890</p>
+    <p>© 2025 Harmoni Event Management System. All Rights Reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

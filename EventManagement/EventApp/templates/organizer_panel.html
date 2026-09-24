@@ -1,0 +1,120 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organizer Panel – Selected Events</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#ffe4f0;
+  margin:0;
+}
+header{
+  background:#ff5fa2;
+  color:white;
+  padding:18px;
+  text-align:center;
+  font-size:24px;
+  font-weight:bold;
+}
+.container{
+  width:90%;
+  max-width:1000px;
+  margin:20px auto;
+}
+.event-item{
+  background:white;
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:15px;
+  display:flex;
+  gap:15px;
+  align-items:center;
+  box-shadow:0 4px 10px rgba(255,105,180,.2);
+  transition: transform 0.2s;
+}
+.event-item:hover{
+  transform: scale(1.02);
+}
+.event-item img{
+  width:120px;
+  height:90px;
+  object-fit:cover;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+.event-details{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.no-event{
+  text-align:center;
+  font-size:18px;
+  color:#555;
+  margin-top:50px;
+}
+</style>
+</head>
+
+<body>
+
+<header>Organizer Panel – Selected Events</header>
+
+<div class="container">
+
+{% if events %}
+  {% for ev in events %}
+    <div class="event-item">
+
+      {% comment %} Show image based on event name {% endcomment %}
+      {% if ev.event_name == "Birthday" %}
+        <img src="{% static 'My_events/eventpics/birthday 1.png' %}" alt="Birthday">
+      {% elif ev.event_name == "Wedding" %}
+        <img src="{% static 'My_events/eventpics/wedding.png' %}" alt="Wedding">
+      {% elif ev.event_name == "Anniversary" %}
+        <img src="{% static 'My_events/eventpics/anniversary.png' %}" alt="Anniversary">
+      {% elif ev.event_name == "Corporate" %}
+        <img src="{% static 'My_events/eventpics/corporate.png' %}" alt="Corporate">
+      {% elif ev.event_name == "Baby Shower" %}
+        <img src="{% static 'My_events/eventpics/babyshower.png' %}" alt="Baby Shower">
+      {% elif ev.event_name == "Farewell" %}
+        <img src="{% static 'My_events/eventpics/farewell.png' %}" alt="Farewell">
+      {% elif ev.event_name == "Graduation" %}
+        <img src="{% static 'My_events/eventpics/graduation.png' %}" alt="Graduation">
+      {% elif ev.event_name == "Housewarming" %}
+        <img src="{% static 'My_events/eventpics/housewarming.png' %}" alt="Housewarming">
+      {% elif ev.event_name == "Festival" %}
+        <img src="{% static 'My_events/eventpics/festival.png' %}" alt="Festival">
+      {% elif ev.event_name == "Concert" %}
+        <img src="{% static 'My_events/eventpics/concert.png' %}" alt="Concert">
+      {% elif ev.event_name == "Fashion" %}
+        <img src="{% static 'My_events/eventpics/fashion.png' %}" alt="Fashion">
+      {% elif ev.event_name == "Workshop" %}
+        <img src="{% static 'My_events/eventpics/workshop.png' %}" alt="Workshop">
+      {% elif ev.event_name == "Sports" %}
+        <img src="{% static 'My_events/eventpics/sports.png' %}" alt="Sports">
+      {% elif ev.event_name == "Charity" %}
+        <img src="{% static 'My_events/eventpics/charity.png' %}" alt="Charity">
+      {% else %}
+        <img src="{% static 'My_events/eventpics/default.png' %}" alt="Event">
+      {% endif %}
+
+      <div class="event-details">
+        <strong>{{ ev.event_name }}</strong>
+        <span>Selected on: {{ ev.date_selected|date:"d M Y, h:i A" }}</span>
+      </div>
+
+    </div>
+  {% endfor %}
+{% else %}
+  <p class="no-event">No event has been selected!</p>
+{% endif %}
+
+</div>
+</body>
+</html>

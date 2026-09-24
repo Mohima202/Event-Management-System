@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login - Event Management System</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+    *{ margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+    body{
+      background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+                  url("https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1600&q=80")
+                  no-repeat center/cover;
+      min-height:100vh; display:flex; align-items:center; 
+      justify-content:center;
+      padding:20px;
+    }
+    .auth-box{
+      width:100%; max-width:420px; 
+      background:rgba(255,255,255,0.12);
+      padding:30px; border-radius:12px; 
+      color:#fff; backdrop-filter:blur(10px);
+      box-shadow:0 8px 20px rgba(0,0,0,0.3);
+    }
+    h2{
+      text-align:center;margin-bottom:15px;font-size:28px;
+    }
+    label{
+      display:block;margin-top:10px;font-weight:600;
+    }
+    input{
+      width:100%;padding:10px;margin-top:8px;border-radius:6px;
+      border:none;background:rgba(255,255,255,0.95);color:#111
+    }
+    .btn{
+      width:100%;padding:12px;margin-top:18px;border-radius:6px;
+      border:0;background:#3498db;color:#fff;cursor:pointer
+    }
+    .btn:hover{
+      background:#217dbb
+    }
+    .btn a{
+      width:100%;padding:12px;margin-top:18px;text-decoration:none;
+      border-radius:6px;border:0;background:#3498db;color:#fff;cursor:pointer
+    }
+    .btn a:hover{
+      background:#217dbb
+    }
+    .msg{
+      margin-top:10px;color:#ffd369;text-align:center
+    }
+    .switch-text{
+      text-align:center;margin-top:10px
+    }
+    .switch-text a{
+      color:#ffd369;text-decoration:none
+    }
+  </style>
+
+</head>
+<body>
+
+  <div class="auth-box">
+    <h2>Login</h2>
+
+    {% if messages %}
+      <div class="msg">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Django Login Form -->
+    <form method="POST" action="{% url 'login' %}">
+      {% csrf_token %}
+
+      <label for="email">Email</label>
+      <input id="email" type="email" name="email" placeholder="Enter your email" autocomplete="email" required>
+
+      <label for="password">Password</label>
+      <input id="password" type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+
+      <button class="btn" type="submit">Login</button>
+      <button class="btn"><a href="{% url 'home' %}">Cancel</a></button>
+    </form>
+
+    <p class="switch-text">Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+  </div>
+
+</body>
+</html>

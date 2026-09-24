@@ -1,0 +1,266 @@
+<h2>Participate in an Event</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="message" id="success-message">
+            {{ message|safe }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    <p>
+        {{ form.name.label_tag }} 
+        {{ form.name }}
+        {{ form.name.errors }}
+    </p>
+
+    <p>
+        {{ form.email.label_tag }} 
+        {{ form.email }}
+        {{ form.email.errors }}
+    </p>
+
+    <p>
+        {{ form.idea_title.label_tag }} 
+        {{ form.idea_title }}
+        {{ form.idea_title.errors }}
+    </p>
+
+    <p>
+        {{ form.description.label_tag }} 
+        {{ form.description }}
+        {{ form.description.errors }}
+    </p>
+
+    <p>
+        {{ form.category.label_tag }} 
+        {{ form.category }}
+        {{ form.category.errors }}
+    </p>
+
+    <p>
+        {{ form.budget_estimate.label_tag }} 
+        {{ form.budget_estimate }}
+        {{ form.budget_estimate.errors }}
+    </p>
+
+    <p>
+        {{ form.preferred_date.label_tag }} 
+        {{ form.preferred_date }}
+        {{ form.preferred_date.errors }}
+    </p>
+
+    <p>
+        {{ form.catering_type.label_tag }} 
+        {{ form.catering_type }}
+        {{ form.catering_type.errors }}
+    </p>
+
+    <div id="snack-box" style="display:none; margin-left:15px;">
+        <label><strong>Snack Items:</strong></label>
+        {{ form.snack_items }}
+        {{ form.snack_items.errors }}
+    </div>
+
+    <div id="fullmeal-box" style="display:none; margin-left:15px;">
+        <label><strong>Full Meal Items:</strong></label>
+        {{ form.fullmeal_items }}
+        {{ form.fullmeal_items.errors }}
+    </div>
+
+    <p>
+        {{ form.location.label_tag }}
+        {{ form.location }}
+        {{ form.location.errors }}
+    </p>
+
+    <p>
+        {{ form.venue.label_tag }} 
+        {{ form.venue }}
+        {{ form.venue.errors }}
+    </p>
+
+    <p>
+        {{ form.file.label_tag }} 
+        {{ form.file }}
+        {{ form.file.errors }}
+    </p>
+
+    <p>
+        {{ form.consent }} {{ form.consent.label_tag }}
+        {{ form.consent.errors }}
+    </p>
+
+    <button type="submit">Submit</button>
+</form>
+
+<style>
+/* ===== Global Page Theme ===== */
+body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #f7f2ff, #fdeaff);
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+/* ===== Title ===== */
+h2 {
+    text-align: center;
+    color: #6a0dad; /* purple */
+    margin-bottom: 25px;
+    font-size: 28px;
+}
+
+/* ===== Form Container ===== */
+form {
+    width: 75%;
+    max-width: 700px;
+    margin: auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(106, 13, 173, 0.15); /* purple shadow */
+}
+
+/* ===== Labels & Paragraph Wrappers ===== */
+form p {
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: 600;
+    color: #5a2c8f; /* darker purple */
+}
+
+/* ===== Input Styling ===== */
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #d3c4f7;
+    border-radius: 10px;
+    outline: none;
+    background: #faf8ff;
+    transition: 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #b470f2; /* soft purple */
+    background: white;
+    box-shadow: 0 0 8px rgba(180,112,242,0.4);
+}
+
+/* ===== Error Styling ===== */
+.errorlist {
+    color: #d6005c; /* pink-ish red */
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* ===== Dynamic Snack + Meal Fields ===== */
+#snack-box, #fullmeal-box {
+    background: #f9f4ff;
+    padding: 12px;
+    border-left: 4px solid #c084fc; 
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* ===== Submit Button ===== */
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #b517ff, #ff3db0);
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 18px rgba(255, 0, 128, 0.4);
+}
+
+/* ===== Success Message ===== */
+.message {
+    width: 60%;
+    margin: 10px auto 20px;
+    padding: 12px;
+    text-align: center;
+    background: linear-gradient(135deg, #d8b4fe, #ffafcc);
+    color: #4a005f;
+    font-weight: bold;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(134, 0, 179, 0.2);
+}
+</style>
+
+
+<script>
+function toggleCateringFields() {
+    const type = document.getElementById("id_catering_type").value;
+
+    document.getElementById("snack-box").style.display =
+        type === "snacks" ? "block" : "none";
+
+    document.getElementById("fullmeal-box").style.display =
+        type === "full" ? "block" : "none";
+}
+
+document.addEventListener("DOMContentLoaded", toggleCateringFields);
+document.getElementById("id_catering_type").addEventListener("change", toggleCateringFields);
+
+const venueOptions = {
+    "agrabad": ["Classic world convention Hall", "Hotel Agrabad", "Abdullah convention Hall", "VIP Banquet", 
+                "The Green Shadow Rasturant", "The village Rasturant", "Bir Bangali Rasturant", "Hotel Rahman & Rasturant"],
+    "bohoddarhat": ["Ahad Convention Hall", "AK convention Hall", "RB convention Hall", "Hall-7 Convention center", 
+                "Din Mohammad Convention Hall", "Handi Rasturant", "Barcode Food Junction", "Hotel Zaman & Rasturant"],
+    "chawkbazar": ["Al-Razzaque Convention Hall", "New Shapla Banquet Hall", "City View Banquet Hall", "Blue Ocean Banquet Hall", 
+            "The Food Court Rasturant", "The Tasty Treat Rasturant", "Spicy Villa Rasturant", "Hotel Sea Crown & Rasturant"],
+    "gec": ["K & K Convention Hall", "Royal Garden Banquet Hall", "Grand Plaza Banquet Hall", "Sky View Banquet Hall", 
+            "The Royal Feast Rasturant", "The Grand Treat Rasturant", "Spicey Treat Rasturant", "Hotel Alif & Rasturant"],
+    "jamal_khan": ["JK Convention Hall", "City Heart Banquet Hall", "Sunset Banquet Hall", "Dawaat Rasturant", 
+            "Royal Feast Rasturant", "Tasty Treat Rasturant", "Food Villa Rasturant", "Hotel Imperial & Rasturant"],
+    "new_market": ["Elite Banquet Hall", "Majestic Banquet Hall", "Food Court Rasturant", 
+            "The Royal Dine Rasturant", "Yummy Treat Rasturant", "Gourmet Villa Rasturant", "Hotel Crown & Rasturant"],
+};
+
+// Dynamically populate venues
+function updateVenueDropdown() {
+    const locationSelect = document.getElementById("id_location");
+    const venueSelect = document.getElementById("id_venue");
+    const selectedLocation = locationSelect.value;
+
+    // clear existing options
+    venueSelect.innerHTML = "";
+
+    // populate new options
+    if (venueOptions[selectedLocation]) {
+        venueOptions[selectedLocation].forEach(function(venue) {
+            const option = document.createElement("option");
+            option.value = venue;
+            option.text = venue;
+            venueSelect.appendChild(option);
+        });
+    }
+}
+
+// run on page load and location change
+document.addEventListener("DOMContentLoaded", updateVenueDropdown);
+document.getElementById("id_location").addEventListener("change", updateVenueDropdown);
+
+setTimeout(function() {
+    var msg = document.getElementById('success-message');
+    if(msg) msg.style.display = 'none';
+}, 10000);
+</script>

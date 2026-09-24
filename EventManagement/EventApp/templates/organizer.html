@@ -1,0 +1,380 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harmoni – Organizer Dashboard</title>
+
+<!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+
+<style>
+/* ===== Global ===== */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f7f2ff, #fdeaff);
+    margin: 0;
+}
+
+/* ===== HEADER ===== */
+header {
+    background: linear-gradient(135deg, #b517ff, #ff3db0);
+    border-bottom: 3px solid #ffffffff;
+}
+
+.nav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+nav ul li a:hover { color: #ffd1e0; }
+
+/* ===== GRID CONTAINER ===== */
+.container {
+    width: 90%;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+/* ===== EVENT CARD ===== */
+.event-card {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 6px 20px rgba(255, 105, 180, 0.25);
+    border-top: 6px solid #de82ffff;
+    transition: .3s;
+}
+.event-card:hover { transform: translateY(-6px); }
+
+.event-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+.event-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #6a0dad;
+    margin-bottom: 6px;
+}
+
+.event-desc {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 14px;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    background: #de82ffff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn:hover { background: #dc6d9b; }
+
+/* ===== PARTICIPATION CARD ===== */
+.participant-card {
+    background: #fff7f9;
+    border-radius: 14px;
+    padding: 18px;
+    border-left: 6px solid #de82ffff;
+    box-shadow: 0 6px 20px rgba(255, 105, 180, 0.1);
+    transition: .3s;
+}
+.participant-card:hover { transform: translateY(-4px); }
+
+.participant-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #6a0dad;
+    margin-bottom: 8px;
+}
+
+.participant-info {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.participant-info strong { color: #000000ff; }
+
+/* ===== SECTION HEADERS ===== */
+.section-title {
+    text-align: center;
+    color: #6a0dad;
+    margin: 40px 0 20px;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+footer { margin-top: 40px; margin-bottom: 0;
+    padding:40px 8%; background:#111; text-align:center; color:var(--text-darkmode); 
+    font-size:14px; display:flex; flex-direction:column; align-items:center; gap:15px; 
+}
+
+    footer .social-links { display:flex; gap:15px; }
+    footer .social-links a { display:inline-flex; align-items:center; justify-content:center; 
+        width:40px; height:40px; font-size:20px; color:#ccc; border-radius:50%; 
+        background:rgba(255,255,255,0.05); transition: all 0.3s; }
+    footer .social-links a:hover { 
+        background: var(--primary-gradient); color:#fff; transform: scale(1.2); }
+
+    footer .contact-info p { 
+        font-size:14px; margin:3px 0; color:#ccc; 
+    }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width: 992px) { .container { grid-template-columns: repeat(2, 1fr); } }
+@media(max-width: 576px) { .container { grid-template-columns: 1fr; } }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav-inner">
+    <div class="logo">HARMONI</div>
+    <nav>
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'login' %}">Events</a></li>
+        <li><a href="{% url 'organizer' %}">Organizer</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== PARTICIPANT SUBMISSIONS ===== -->
+<!-- Participant Submissions -->
+<div class="section-title">📋 Participant Submissions</div>
+<!-- Event Selection Dropdown -->
+<div style="text-align:center; margin: 20px 0;">
+  <form method="GET">
+    <label for="event-select"><strong>Select Event:</strong></label>
+    <select name="event" id="event-select">
+      <option value="">-- All Events --</option>
+      {% for e in events %}
+        <option value="{{ e.id }}" {% if selected_event_id == e.id|stringformat:"s" %}selected{% endif %}>{{ e.name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn" style="margin-left:10px;">Filter</button>
+  </form>
+</div>
+
+<!-- Success Message -->
+{% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="success-msg" style="background:#d4edda; color:#155724; padding:10px; margin-bottom:10px; border-radius:5px;">
+        🌸 {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div class="container">
+{% for p in participations %}
+  <div class="participant-card">
+    <div class="participant-title">{{ p.idea_title }}</div>
+
+    <div class="participant-info">
+      <strong>Name:</strong> {{ p.name }} <br>
+      <strong>Email:</strong> {{ p.email }} <br>
+      <strong>Category:</strong> {{ p.category }} <br>
+      <strong>Budget:</strong> {{ p.budget_estimate }} <br>
+      <strong>Date:</strong> {{ p.preferred_date }} <br>
+      <strong>Location:</strong> {{ p.location }} <br>
+      <strong>Venue:</strong> {{ p.venue }}
+    </div>
+
+    {% if p.file %}
+      <a href="{{ p.file.url }}" class="btn" target="_blank">View Attachment</a>
+    {% endif %}
+
+    <!-- SELECT BUTTON -->
+    <form method="POST" action="{% url 'organizer' %}" style="margin-top:10px;">
+      {% csrf_token %}
+      <input type="hidden" name="participation_id" value="{{ p.id }}">
+      <button type="submit" class="btn" style="background:#6a0dad;">
+        Select Submission
+      </button>
+    </form>
+  </div>
+
+{% empty %}
+  <p style="text-align:center; font-size:16px;">No submissions yet.</p>
+{% endfor %}
+
+</div>
+
+<!-- ===== ORGANIZER EVENTS ===== -->
+<div class="section-title">📅 My Events</div>
+<div class="container">
+
+<!-- Birthday -->
+<div class="event-card">
+    <img src="{% static 'EventApp/eventpics/birthday 1.png' %}" class="event-img">
+    <div class="event-title">🎉 Birthday Party</div>
+    <div class="event-desc">Decoration, Cake, Photography, Music & Lighting.</div>
+    <a href="https://www.bookeventz.com/real-events/arivs-first-birthday-party" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Wedding -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/wedding.png' %}" class="event-img">
+    <div class="event-title">💍 Wedding</div>
+    <div class="event-desc">Stage, Catering, Venue, Photography.</div>
+    <a href="https://www.bookeventz.com/real-events/rakesh-weds-namarta" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Anniversary -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/anniversary.png' %}" class="event-img">
+    <div class="event-title">🎊 Anniversary</div>
+    <div class="event-desc">Decoration, Cake, Family Gathering.</div>
+    <a href="https://www.bookeventz.com/real-events/an-ode-to-cocktail-parties" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Corporate -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/corporate.png' %}" class="event-img">
+    <div class="event-title">🏢 Corporate Event</div>
+    <div class="event-desc">Office Party, Catering, Music.</div>
+    <a href="https://www.bookeventz.com/real-events/treadmill-chemarc" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Baby Shower -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/babyshower.png' %}" class="event-img">
+    <div class="event-title">👶 Baby Shower</div>
+    <div class="event-desc">Games, Gifts, Decoration, Cake.</div>
+    <a href="https://www.bookeventz.com/real-events/niddys-baby-shower" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Farewell -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/farewll.png' %}" class="event-img">
+    <div class="event-title">🎉 Farewell Party</div>
+    <div class="event-desc">Decoration, Music, Photography.</div>
+    <a href="https://www.shutterstock.com/search/farewell-event" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Graduation Party -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/graduation.png' %}"  class="event-img">
+    <div class="event-title">🎓 Graduation Party</div>
+    <div class="event-desc">Decor, Music, Photography, Cake, Friends gathering.</div>
+    <a href="https://www.shutterstock.com/search/graduation-event" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Housewarming / Griha Pravesh -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/housewarming.png' %}" class="event-img">
+    <div class="event-title">🏠 Housewarming</div>
+    <div class="event-desc">Decoration, Puja setup, Food arrangement, Photography.</div>
+    <a href="https://curatedevents.com/blog/luxury-housewarming-party-ideas/" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Festival Event -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/festival.png' %}" class="event-img">
+    <div class="event-title">🎉 Festival Event (Eid, Pohela Boishakh, Christmas)</div>
+    <div class="event-desc">Stage, Music, Food stalls, Decorations, Photography.</div>
+    <a href="https://www.bookeventz.com/real-events/carwales-annual-award-function" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Concert / Music Event -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/concert.png' %}" class="event-img">
+    <div class="event-title">🎵 Concert / Music Event</div>
+    <div class="event-desc">Stage, Sound, Lighting, Artist management, Audience seating.</div>
+    <a href="https://open.spotify.com/concerts" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Fashion Show / Exhibition -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/fashion.png' %}" class="event-img">
+    <div class="event-title">👗 Fashion Show / Exhibition</div>
+    <div class="event-desc">Stage, Lighting, Ramp, Models, Exhibition stalls.</div>
+    <a href="https://www.shutterstock.com/search/exhibition-fashion-show" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Workshop / Seminar -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/workshop.png' %}" class="event-img">
+    <div class="event-title">📚 Workshop / Seminar</div>
+    <div class="event-desc">Seating, Audio/Visual, Presentation setup, Materials.</div>
+    <a href="https://www.shutterstock.com/search/events-workshop" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Sports Event / Tournament -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/sports.png' %}" class="event-img">
+    <div class="event-title">🏅 Sports Event / Tournament</div>
+    <div class="event-desc">Ground arrangement, Teams, Equipment, Prize setup.</div>
+    <a href="https://www.shutterstock.com/search/tournament-event" class="btn" target="_blank">See details</a>
+  </div>
+
+  <!-- Charity / Fundraising Event -->
+  <div class="event-card">
+    <img src="{% static 'EventApp/eventpics/charity.png' %}" class="event-img">
+    <div class="event-title">❤️ Charity / Fundraising Event</div>
+    <div class="event-desc">Awareness, Donations, Stage, Program, Volunteers.</div>
+    <a href="https://dribbble.com/tags/charity-event" class="btn" target="_blank">See details</a>
+  </div>
+
+</div>
+
+
+<footer id="footer">
+  <div class="social-links">
+    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+    <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+  </div>
+  <div class="contact-info">
+    <p>Call us: +8801234567890</p>
+    <p>© 2025 Harmoni Event Management System. All Rights Reserved.</p>
+  </div>
+</footer>
+</body>
+</html>
+{% load static %}
